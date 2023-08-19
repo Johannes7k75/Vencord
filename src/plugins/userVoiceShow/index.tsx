@@ -80,6 +80,7 @@ export default definePlugin({
     name: "UserVoiceShow",
     description: "Shows whether a User is currently in a voice channel somewhere in their profile",
     authors: [Devs.LordElias],
+    tags: ["activityicons"],
     settings,
 
     patchModal({ user }: UserProps) {
