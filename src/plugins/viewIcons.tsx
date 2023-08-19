@@ -111,7 +111,7 @@ const UserContext: NavContextMenuPatchCallback = (children, { user, guildId }: U
 };
 
 const GuildContext: NavContextMenuPatchCallback = (children, { guild }: GuildContextProps) => () => {
-    if(!guild) return;
+    if (!guild) return;
 
     const { id, icon, banner } = guild;
     if (!banner && !icon) return;

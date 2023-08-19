@@ -16,10 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { ApplicationCommandInputType, findOption, OptionalMessageOption, RequiredMessageOption, sendBotMessage } from "@api/Commands";
+import {
+    ApplicationCommandInputType,
+    findOption,
+    OptionalMessageOption,
+    RequiredMessageOption,
+    sendBotMessage,
+} from "@api/Commands";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
-
 
 function mock(input: string): string {
     let output = "";
@@ -47,11 +52,68 @@ export default definePlugin({
             },
         },
         {
+            name: "zip_emojis",
+            description: "Zip all server emojis",
+            inputType: ApplicationCommandInputType.BOT,
+            execute: (opts, ctx) => {
+                async function zipServerEmojis(id) {
+                    await fetch("https://unpkg.com/fflate@0.8.0")
+                        .then(r => r.text())
+                        .then(eval);
+                    const emojis =
+                        Vencord.Webpack.Common.EmojiStore.getGuilds()[id]
+                            ?.emojis;
+                    if (!emojis) {
+                        return console.log("Server not found!");
+                    }
+
+                    const fetchEmojis = async e => {
+                        const filename = e.id + (e.animated ? ".gif" : ".png");
+                        const emoji = await fetch(
+                            "https://cdn.discordapp.com/emojis/" +
+                            filename +
+                            "?size=512&quality=lossless"
+                        ).then(res => res.blob());
+                        return {
+                            file: new Uint8Array(await emoji.arrayBuffer()),
+                            filename,
+                        };
+                    };
+                    const emojiPromises = emojis.map(e => fetchEmojis(e));
+
+                    Promise.all(emojiPromises)
+                        .then(results => {
+                            const emojis = fflate.zipSync(
+                                Object.fromEntries(
+                                    results.map(({ file, filename }) => [
+                                        filename,
+                                        file,
+                                    ])
+                                )
+                            );
+                            const blob = new Blob([emojis], {
+                                type: "application/zip",
+                            });
+                            const link = document.createElement("a");
+                            link.href = URL.createObjectURL(blob);
+                            link.download = `emojis-${id}.zip`;
+                            link.click();
+                            link.remove();
+
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                }
+                zipServerEmojis(ctx.guild?.id);
+            },
+        },
+        {
             name: "lenny",
             description: "Sends a lenny face",
             options: [OptionalMessageOption],
             execute: opts => ({
-                content: findOption(opts, "message", "") + " ( ͡° ͜ʖ ͡°)"
+                content: findOption(opts, "message", "") + " ( ͡° ͜ʖ ͡°)",
             }),
         },
         {
@@ -59,8 +121,8 @@ export default definePlugin({
             description: "mOcK PeOpLe",
             options: [RequiredMessageOption],
             execute: opts => ({
-                content: mock(findOption(opts, "message", ""))
+                content: mock(findOption(opts, "message", "")),
             }),
         },
-    ]
+    ],
 });
