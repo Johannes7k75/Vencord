@@ -44,6 +44,12 @@ export const settings = definePluginSettings({
         description: "Show a user's Voice Channel indicator in messages",
         default: true,
         restartNeeded: true
+    },
+    showLiveIndicator: {
+        type: OptionType.BOOLEAN,
+        description: "Show a Live indicator next to a user's Voice Channel indicator",
+        default: true,
+        restartNeeded: true
     }
 });
 
@@ -51,7 +57,7 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "UserVoiceShow",
     description: "Shows an indicator when a user is in a Voice Channel",
-    authors: [Devs.Nuckyz, Devs.LordElias],
+    authors: [Devs.Nuckyz, Devs.LordElias, Devs.Johannes7k75],
     dependencies: ["MemberListDecoratorsAPI", "MessageDecorationsAPI"],
     settings,
 
