@@ -24,9 +24,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
-import VoiceActivityIcon from "./components/VoiceActivityIcon";
 import { VoiceChannelIndicator } from "./components";
-import { VoiceChannelSection } from "./components/VoiceChannelSection";
 
 export const settings = definePluginSettings({
     showInUserProfileModal: {
@@ -46,44 +44,19 @@ export const settings = definePluginSettings({
         description: "Show a user's Voice Channel indicator in messages",
         default: true,
     },
-    showVoiceActivityIcons: {
-        type: OptionType.BOOLEAN,
-        description: "Show a user's voice activity in dm list and member list",
-        default: true,
-        restartNeeded: true,
-    },
-    showUsersInVoiceActivity: {
-        type: OptionType.BOOLEAN,
-        description: "Whether to show a list of users connected to a channel",
-        default: true,
-        disabled: () => !settings.store.showVoiceActivityIcons
-    },
+    // showVoiceActivityIcons: {
+    //     type: OptionType.BOOLEAN,
+    //     description: "Show a user's voice activity in dm list and member list",
+    //     default: true,
+    //     restartNeeded: true,
+    // },
+    // showUsersInVoiceActivity: {
+    //     type: OptionType.BOOLEAN,
+    //     description: "Whether to show a list of users connected to a channel",
+    //     default: true,
+    //     disabled: () => !settings.store.showVoiceActivityIcons
+    // },
 });
-
-interface UserProps {
-    user: User;
-}
-
-const VoiceChannelField = ErrorBoundary.wrap(({ user }: UserProps) => {
-    const { channelId } = VoiceStateStore.getVoiceStateForUser(user.id) ?? {};
-    if (!channelId) return null;
-
-    const channel = ChannelStore.getChannel(channelId);
-    if (!channel) return null;
-
-    const guild = GuildStore.getGuild(channel.guild_id);
-
-    if (!guild) return null; // When in DM call
-
-    return (
-        <VoiceChannelSection
-            channel={channel}
-            joinDisabled={VoiceStateStore.getVoiceStateForUser(UserStore.getCurrentUser().id)?.channelId === channelId}
-            showHeader={settings.store.showVoiceChannelSectionHeader}
-        />
-    );
-});
-
 
 export default definePlugin({
     name: "UserVoiceShow",
