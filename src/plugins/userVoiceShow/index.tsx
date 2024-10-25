@@ -43,8 +43,19 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Show a user's Voice Channel indicator in messages",
         default: true,
-        restartNeeded: true
-    }
+    },
+    // showVoiceActivityIcons: {
+    //     type: OptionType.BOOLEAN,
+    //     description: "Show a user's voice activity in dm list and member list",
+    //     default: true,
+    //     restartNeeded: true,
+    // },
+    // showUsersInVoiceActivity: {
+    //     type: OptionType.BOOLEAN,
+    //     description: "Whether to show a list of users connected to a channel",
+    //     default: true,
+    //     disabled: () => !settings.store.showVoiceActivityIcons
+    // },
 });
 
 
@@ -52,6 +63,7 @@ export default definePlugin({
     name: "UserVoiceShow",
     description: "Shows an indicator when a user is in a Voice Channel",
     authors: [Devs.Nuckyz, Devs.LordElias],
+    tags: ["voice", "activity"],
     dependencies: ["MemberListDecoratorsAPI", "MessageDecorationsAPI"],
     settings,
 
