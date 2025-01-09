@@ -194,8 +194,7 @@ function SeekBar() {
                 onChange={(v: number) => {
                     if (isSettingPosition) return;
                     setPosition(v);
-                    seek(v - storePosition);
-                    console.log("seeking to", v - storePosition);
+                    seek(v);
                 }}
                 renderValue={msToHuman}
             />
