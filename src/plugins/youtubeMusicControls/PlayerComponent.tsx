@@ -231,7 +231,7 @@ function AlbumContextMenu({ track }: { track: PlayerState["song"]; }) {
                 id="view-cover"
                 label="View Album Cover"
                 // trolley
-                action={() => track?.imageSrc && openImageModal(track?.imageSrc)}
+                action={() => track?.imageSrc && openImageModal({ url: track.imageSrc })}
                 icon={ImageIcon}
             />
             <Menu.MenuControlItem
