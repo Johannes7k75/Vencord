@@ -257,7 +257,7 @@ function AlbumContextMenu({ track }: { track: PlayerState["song"]; }) {
                 key="ytm-muted"
                 label="Muted"
                 checked={muted}
-                action={() => YoutubeMusicStore.toggleMute()}
+                action={() => YoutubeMusicStore.setMute(!muted)}
             />
         </Menu.Menu>
     );
