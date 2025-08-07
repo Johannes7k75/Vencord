@@ -76,13 +76,6 @@ const settings = definePluginSettings({
         default: false,
         onChange: v => toggleHoverControls(v)
     },
-    websocketUrl: {
-        description: "The websocket url",
-        type: OptionType.STRING,
-        placeholder: "ws://localhost:26539",
-        default: "ws://localhost:26539",
-        isValid: isUrlValid,
-    },
     apiServerUrl: {
         description: "The api server url",
         type: OptionType.STRING,
