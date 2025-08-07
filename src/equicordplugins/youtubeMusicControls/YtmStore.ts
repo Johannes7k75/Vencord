@@ -48,6 +48,7 @@ interface Song {
 export interface PlayerState {
     song: Song | null;
     isPlaying: boolean,
+    muted: boolean,
     position: number,
     repeat: Repeat,
     volume: number,
@@ -74,6 +75,7 @@ class YoutubemusicSocket {
     private PORT = 26539;
     public onChange: (e: Message) => void;
     private ready = false;
+    private connecting = false;
 
     private socket: WebSocket | undefined;
 
@@ -82,15 +84,14 @@ class YoutubemusicSocket {
         this.onChange = onChange;
     }
 
+    public scheduleReconnect(ms: number) {
+        setTimeout(() => this.reconnect(), ms);
+    }
+
     public reconnect() {
-        if (this.ready) return;
-        try {
-            this.initWs();
-        } catch (e) {
-            logger.error("Failed to connect to YouTube Music WebSocket", e);
-            return;
-        }
-        this.ready = true;
+        if (this.ready || this.connecting) return;
+        this.connecting = true;
+        this.initWs();
     }
 
     get routes() {
@@ -107,34 +108,40 @@ class YoutubemusicSocket {
         };
     }
 
-    private initWs() {
-        const url = Settings.plugins.YouTubeMusicControls.websocketUrl;
+    private async initWs() {
+        const url = Settings.plugins.YouTubeMusicControls.apiServerUrl;
         if (!url) {
+            this.connecting = false;
             return;
         }
-        this.socket = new WebSocket(url);
+
+        try {
+            this.socket = new WebSocket(new URL("/ws", url));
+        } catch (e) {
+            console.log("Connection failed");
+            return;
+        }
 
         this.socket.addEventListener("open", () => {
-            // logger.info("Connected to YouTube Music WebSocket");
             this.ready = true;
+            this.connecting = false;
             this.routes.pause();
             this.routes.play();
         });
 
         this.socket.addEventListener("error", e => {
-            // logger.error("YouTube Music Socket Error:", e);
-            if (!this.ready) setTimeout(() => this.reconnect(), 5_000);
-            this.onChange({ type: "PLAYER_STATE", song: null, isPlaying: false, position: 0, repeat: "NONE", volume: 0 });
+            this.ready = false;
+            this.connecting = false;
+            if (!this.ready) this.scheduleReconnect(5_000);
+            this.onChange({ type: "PLAYER_STATE", song: null, isPlaying: false, position: 0, repeat: "NONE", volume: 0, muted: false });
 
         });
 
         this.socket.addEventListener("close", e => {
-            // logger.info("YouTube Music Socket Disconnected:", e.code, e.reason);
             this.ready = false;
-            if (!this.ready) setTimeout(() => this.reconnect(), 10_000);
-            // this.tryConnect();
-
-            this.onChange({ type: "PLAYER_STATE", song: null, isPlaying: false, position: 0, repeat: "NONE", volume: 0 });
+            this.connecting = false;
+            if (!this.ready) this.scheduleReconnect(10_000);
+            this.onChange({ type: "PLAYER_STATE", song: null, isPlaying: false, position: 0, repeat: "NONE", volume: 0, muted: false });
         });
 
 
@@ -168,6 +175,7 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
         public isPlaying = false;
         public repeat: Repeat = "NONE";
         public volume = 0;
+        public muted = false;
 
         public isSettingPosition = false;
 
@@ -180,6 +188,7 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
             if (message.position && message.position !== store.position) store.position = message.position ?? 0;
             if (message.volume) store.volume = message.volume ?? 0;
             if (message.repeat) store.repeat = message.repeat;
+            if (message.muted != null) store.muted = message.muted;
 
             store.isSettingPosition = false;
             store.emitChange();
@@ -268,6 +277,9 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
                     seconds: Math.floor(ms / 1000)
                 }
             });
+        }
+        toggleMute() {
+            this.req("post", "/api/v1/toggle-mute");
         }
 
         private req(method: "post" | "get" | "put", route: string, data: any = {}) {
