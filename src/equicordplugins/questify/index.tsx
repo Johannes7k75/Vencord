@@ -801,8 +801,8 @@ export default definePlugin({
             replacement: [
                 {
                     // Enables external audio sources for playing audio.
-                    match: /(\i\(\d+\)\(".\/".concat\(this.name,".mp3"\)\))/,
-                    replace: "this.name.startsWith('https')?this.name:$1"
+                    match: /(?<=new Audio;\i\.src=)/,
+                    replace: "this.name.startsWith('https')?this.name:"
                 },
                 {
                     // Adds an optional callback to the audio player. This is needed to detect
@@ -1025,7 +1025,7 @@ export default definePlugin({
                 },
                 {
                     // Open Video Modal
-                    match: /(\i\?)(\(0,\i.openVideoQuestModal\)\({quest:(\i))/,
+                    match: /(\i\?)?(\(0,\i.openVideoQuestModal\)\({quest:(\i))/,
                     replace: "$1questifyContinue&&$2"
                 },
                 {
