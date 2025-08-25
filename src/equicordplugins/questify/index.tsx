@@ -992,20 +992,20 @@ export default definePlugin({
         },
         {
             // Sorts the "All Quests" tab Quest tiles.
-            // Also sets mobile-only Quests as desktop compatible if the setting is enabled.
-            find: ".ALL);return(",
-            replacement: {
-                match: /(quests:(\i).{0,100}?quests:)\i/,
-                replace: "$1$self.preprocessQuests($2)"
-            }
-        },
-        {
             // Sorts the "Claimed Quests" tab Quest tiles.
+            // Also sets mobile-only Quests as desktop compatible if the setting is enabled.
             find: ".ALL)}):(",
-            replacement: {
-                match: /(claimedQuests:(\i).{0,50}?;)/,
-                replace: "$1$2=$self.preprocessQuests($2);"
-            }
+            group: true,
+            replacement: [
+                {
+                    match: /(claimedQuests:(\i).{0,50}?;)/,
+                    replace: "$1$2=$self.preprocessQuests($2);"
+                },
+                {
+                    match: /(quests:(\i).{0,50}?;)/,
+                    replace: "$1$2=$self.preprocessQuests($2);"
+                }
+            ]
         },
         {
             // Whether preloading assets is enabled or not, the placeholders loading
@@ -1067,15 +1067,11 @@ export default definePlugin({
                     replace: "$1$self.shouldDisableQuestAcceptedButton(arguments[0].quest)??$2"
                 },
                 {
-                    // When the Quest Accepted button which has been enabled again by the above patch is
-                    // clicked, resume the automatic completion of the Quest and disable the button again.
-                    match: /(disabled:\i.\i.\i\[)/,
-                    replace: "onClick:()=>{$self.processQuestForAutoComplete(arguments[0].quest)},$1",
-                },
-                {
                     // The "Quest Accepted" text is changed to "Resume" if the Quest is in progress but not active.
+                    // When the Quest Accepted button which has been enabled again by the above patch is clicked,
+                    // resume the automatic completion of the Quest and disable the button again.
                     match: /(\i.intl.string\(\i.\i#{intl::QUEST_ACCEPTED}\))/,
-                    replace: "$self.getQuestAcceptedButtonText(arguments[0].quest)??$1"
+                    replace: "$self.getQuestAcceptedButtonText(arguments[0].quest)??$1,onClick:()=>{$self.processQuestForAutoComplete(arguments[0].quest)}"
                 }
             ]
         },
