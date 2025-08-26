@@ -11,7 +11,7 @@ export function registerShortcuts(e: IpcMainInvokeEvent, s, shortcut: string) {
     }
     registeredGlobalShortcut = shortcut;
 
-    const startScreenshare = () => e.sender.executeJavaScript("Vencord.Plugins.plugins.ShortcutScreenshareScreen.startScreenshare()");
+    const startScreenshare = () => e.sender.executeJavaScript("Vencord.Plugins.plugins.ShortcuteScreenshare.startScreenshare()");
 
     globalShortcut.register(registeredGlobalShortcut, async () => {
         startScreenshare();

@@ -14,7 +14,7 @@ interface PickerProps {
     streamMedia: any[];
 }
 
-const natives = VencordNative.pluginHelpers.ShortcutScreenshareScreen as PluginNative<typeof import("./native")>;
+const natives = VencordNative.pluginHelpers.ShortcuteScreenshare as PluginNative<typeof import("./native")>;
 
 const startStream = findByCodeLazy('type:"STREAM_START"');
 const stopStream = findByCodeLazy('type:"STREAM_STOP"');
@@ -28,7 +28,7 @@ let isRecordingGlobal: boolean = false;
 
 const HotkeyRecordComponent = () => {
     const [isRecording, setIsRecording] = useState(false);
-    const reloadShortcut = (Vencord.Plugins.plugins.ShortcutScreenshareScreen as typeof import("./index.tsx").default).reloadShortcut;
+    const reloadShortcut = (Vencord.Plugins.plugins.ShortcuteScreenshare as typeof import("./index.tsx").default).reloadShortcut;
 
     const cleanupKeys = (keys: string[]) => {
         const existsAltGraph = keys.findIndex((key, i, keys) => key === 'control' && (keys.length >= i + 1 && keys[i + 1] === 'altgraph'));
@@ -104,7 +104,7 @@ export async function getCurrentMedia() {
 
     if (streamMedia) return streamMedia;
 
-    new Logger("ShortcutScreenshareScreen").error(`Stream Media "${settings.store.streamMedia}" not found. Resetting to default.`);
+    new Logger("ShortcuteScreenshare").error(`Stream Media "${settings.store.streamMedia}" not found. Resetting to default.`);
 
     settings.store.streamMedia = sources[0];
     return sources[0];
