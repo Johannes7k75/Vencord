@@ -133,7 +133,7 @@ class YoutubemusicSocket {
     }
 
     private async initWs() {
-        const url = Settings.plugins.YouTubeMusicControls.apiServerUrl;
+        const url = Settings.plugins.MusicControls.YoutubeMusicApiUrl;
         if (!url) {
             this.connecting = false;
             return;
@@ -280,7 +280,7 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
         }
 
         private req(method: "post" | "get" | "put", route: string, data: any = {}) {
-            const apiServerUrl = Settings.plugins.YouTubeMusicControls.apiServerUrl;
+            const apiServerUrl = Settings.plugins.MusicControls.YoutubeMusicApiUrl;
             if (apiServerUrl === "") return;
             const url = apiServerUrl + route;
 
