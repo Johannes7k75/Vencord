@@ -109,9 +109,9 @@ function makeContextMenu(name: string, path: string) {
 }
 
 function Controls() {
-    const [isPlaying, repeat] = useStateFromStores<[boolean, Repeat]>(
+    const [isPlaying, isShuffled, repeat] = useStateFromStores<[boolean, boolean, Repeat]>(
         [YoutubeMusicStore],
-        () => [YoutubeMusicStore.isPlaying, YoutubeMusicStore.repeat]
+        () => [YoutubeMusicStore.isPlaying, YoutubeMusicStore.isShuffled, YoutubeMusicStore.repeat]
     );
 
     const [nextRepeat, repeatClassName] = (() => {
@@ -127,7 +127,7 @@ function Controls() {
     return (
         <Flex className={cl("button-row")} style={{ gap: 0 }}>
             <Button
-                className={classes(cl("button"), cl("shuffle-off"))}
+                className={classes(cl("button"), isShuffled ? cl("shuffle-on") : cl("shuffle-off"))}
                 onClick={() => YoutubeMusicStore.shuffle()}
             >
                 <Shuffle />
