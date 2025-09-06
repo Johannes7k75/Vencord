@@ -101,14 +101,7 @@ export const logger = new Logger("MusicControls-Ytm");
 
 type Message = PlayerInfo | VideoChanged | PlayerStateChanged | PositionChanged | VolumeChanged | RepeatChanged;
 
-type PlayerState = {
-    song?: Song;
-    volume?: number;
-    muted?: boolean;
-    repeat?: RepeatMode;
-    position?: number;
-    isPlaying?: boolean;
-};
+type PlayerState = Partial<Omit<PlayerInfo, "type">>;
 
 class YoutubemusicSocket {
     public onChange: (e: PlayerState) => void;
