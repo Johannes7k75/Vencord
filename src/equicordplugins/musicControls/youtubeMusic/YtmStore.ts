@@ -142,7 +142,7 @@ class YoutubemusicSocket {
         try {
             this.socket = new WebSocket(new URL("/api/v1/ws", url));
         } catch (e) {
-            console.log("Connection failed");
+            logger.error("Connection failed");
             return;
         }
 
@@ -217,7 +217,7 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
                 ? encodeURI("youtubemusic://openVideo " + videoId[1])
                 : "https://music.youtube.com" + path;
 
-            console.log("Open", url);
+            console.info("Open", url);
 
             // https://music.youtube.com/watch?v=BSHYPb15W-Y
             VencordNative.native.openExternal(url);
