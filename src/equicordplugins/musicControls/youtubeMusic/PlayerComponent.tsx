@@ -24,7 +24,7 @@ import { openImageModal } from "@utils/discord";
 import { classes, copyWithToast } from "@utils/misc";
 import { ContextMenuApi, Flex, FluxDispatcher, Forms, Menu, React, useEffect, useState, useStateFromStores } from "@webpack/common";
 
-import { type Song, type Repeat, YoutubeMusicStore, logger } from "./YtmStore";
+import { type Song, type Repeat, YoutubeMusicStore } from "./YtmStore";
 import { SeekBar } from "@equicordplugins/musicControls/spotify/SeekBar";
 
 const cl = (className: string) => `vc-ytm-${className}`;
@@ -344,7 +344,6 @@ export function YtmPlayer() {
 
 
     React.useEffect(() => {
-        logger.log({ isPlaying });
         setShouldHide(false);
         if (!isPlaying) {
             const timeout = setTimeout(() => setShouldHide(true), 1000 * 60 * 5);
