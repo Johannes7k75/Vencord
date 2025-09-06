@@ -46,11 +46,9 @@ export default definePlugin({
         "TidalControls",
         "TidalLyrics",
         // Youtube
-        /* Deprecated RN
         "Youtube",
         "YoutubeMusic",
         "YoutubeMusicControls"
-        */
     ],
 
     patches: [
