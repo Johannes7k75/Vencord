@@ -171,7 +171,6 @@ class YoutubemusicSocket {
             let message: Message;
             try {
                 message = JSON.parse(e.data) as Message;
-                logger.log(message);
                 this.onChange(message);
             } catch (err) {
                 logger.error("Invalid JSON:", err, `\n${e.data}`);
@@ -284,19 +283,15 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
             if (apiServerUrl === "") return;
             const url = apiServerUrl + route;
 
-            const res = fetch(url, {
+            fetch(url, {
                 method,
                 ...data,
                 ...(data.body && { body: JSON.stringify(data.body), headers: { "Content-Type": "application/json" } })
             });
-
-            logger.log(res);
         }
     }
 
     const store = new YoutubeMusicStore(FluxDispatcher);
-
-    logger.info("Youtube Music Controls initialized");
 
     return store;
 });
