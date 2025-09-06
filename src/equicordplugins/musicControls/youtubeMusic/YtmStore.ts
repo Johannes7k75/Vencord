@@ -55,6 +55,7 @@ enum DataTypes {
     PositionChanged = 'POSITION_CHANGED',
     VolumeChanged = 'VOLUME_CHANGED',
     RepeatChanged = 'REPEAT_CHANGED',
+    ShuffleChanged = 'SHUFFLE_CHANGED',
 }
 
 type PlayerInfo = {
@@ -65,6 +66,7 @@ type PlayerInfo = {
     repeat: RepeatMode;
     position: number;
     isPlaying: boolean;
+    shuffle: boolean;
 };
 
 type VideoChanged = {
@@ -95,11 +97,16 @@ type RepeatChanged = {
     repeat: RepeatMode;
 };
 
+type ShuffleChanged = {
+    type: DataTypes.ShuffleChanged;
+    shuffle: boolean;
+};
+
 export type Repeat = "NONE" | "ONE" | "ALL";
 
 export const logger = new Logger("MusicControls-Ytm");
 
-type Message = PlayerInfo | VideoChanged | PlayerStateChanged | PositionChanged | VolumeChanged | RepeatChanged;
+type Message = PlayerInfo | VideoChanged | PlayerStateChanged | PositionChanged | VolumeChanged | RepeatChanged | ShuffleChanged;
 
 type PlayerState = Partial<Omit<PlayerInfo, "type">>;
 
@@ -182,6 +189,7 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
 
         public song: Song | null = null;
         public isPlaying = false;
+        public isShuffled = false;
         public repeat: Repeat = "NONE";
         public volume = 0;
         public muted = false;
@@ -194,6 +202,7 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
                 store.isPlaying = !(message.song?.isPaused ?? false);
             };
             if (message.isPlaying != null && !message.song) store.isPlaying = message.isPlaying;
+            if (message.shuffle != null) store.isShuffled = message.shuffle;
             if (message.position && message.position !== store.position) store.position = message.position ?? 0;
             if (message.volume) store.volume = message.volume ?? 0;
             if (message.repeat) store.repeat = message.repeat;
