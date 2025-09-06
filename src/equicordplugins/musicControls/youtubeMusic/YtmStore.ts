@@ -213,7 +213,7 @@ export const YoutubeMusicStore = proxyLazyWebpack(() => {
         public openExternal(path: string) {
             const videoId = path.match(/watch\?v=([\w-]+)/);
 
-            const url = (Settings.plugins.YouTubeMusicControls.useYoutubeMusicUri || Vencord.Plugins.isPluginEnabled("OpenInApp")) && videoId
+            const url = Vencord.Plugins.isPluginEnabled("OpenInApp") && videoId
                 ? encodeURI("youtubemusic://openVideo " + videoId[1])
                 : "https://music.youtube.com" + path;
 
