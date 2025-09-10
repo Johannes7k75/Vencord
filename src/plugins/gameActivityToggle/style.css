@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 [class^="panels"] [class^="avatarWrapper"] {
     min-width: 88px;
 }
@@ -12,3 +13,9 @@
     gap: 4px;
 }
 >>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
+=======
+/* make gap smaller since we're adding an extra button */
+[class^="panels"] [class^="buttons"] {
+    gap: 4px;
+}
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde

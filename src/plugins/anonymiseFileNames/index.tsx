@@ -17,12 +17,17 @@
 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
-import { Upload } from "@api/MessageEvents";
 import { definePluginSettings, Settings } from "@api/Settings";
+<<<<<<< HEAD
 =======
 import { definePluginSettings } from "@api/Settings";
 >>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
+=======
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 import ErrorBoundary from "@components/ErrorBoundary";
 import { reverseExtensionMap } from "@equicordplugins/fixFileExtensions";
 import { Devs } from "@utils/constants";
@@ -123,6 +128,7 @@ export default definePlugin({
     }, { noop: true }),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     anonymise(upload: Upload) {
 =======
     anonymise(upload: CloudUpload) {
@@ -131,6 +137,9 @@ export default definePlugin({
         }
 >>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
 
+=======
+    anonymise(upload: CloudUpload) {
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
         const originalFileName = upload.filename;
         const tarMatch = tarExtMatcher.exec(originalFileName);
         const extIdx = tarMatch?.index ?? originalFileName.lastIndexOf(".");

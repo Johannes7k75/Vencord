@@ -10,14 +10,20 @@ import { definePluginSettings, Settings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 import { GuildMember, Message, User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, GuildMemberStore, GuildStore, MessageStore, RelationshipStore, StreamerModeStore, UserStore } from "@webpack/common";
 import { JSX } from "react";
+<<<<<<< HEAD
 =======
 import { Channel, Message, User } from "@vencord/discord-types";
 import { RelationshipStore, StreamerModeStore } from "@webpack/common";
 >>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
+=======
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 
 const wrapEmojis = findByCodeLazy("lastIndex;return");
 const AccessibilityStore = findStoreLazy("AccessibilityStore");
@@ -640,12 +646,26 @@ function renderUsername(
 const hoveringMessageSet = new Set<string>();
 const hoveringReactionPopoutSet = new Set<string>();
 
+function handleHoveringMessage(message: any, animate: boolean) {
+    if (!message) return;
+
+    if (animate) {
+        addHoveringMessage(message.id);
+        addHoveringMessage(message.showMeYourNameGroupId);
+    } else {
+        removeHoveringMessage(message.id);
+        removeHoveringMessage(message.showMeYourNameGroupId);
+    }
+}
+
 function addHoveringMessage(id: string) {
+    if (!id) return;
     hoveringMessageSet.add(id);
     settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
 }
 
 function removeHoveringMessage(id: string) {
+    if (!id) return;
     hoveringMessageSet.delete(id);
     settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
 }
@@ -788,15 +808,25 @@ export default definePlugin({
             ]
         },
         {
+            // Track hovering on messages to animate mentions.
             find: /setAnimate.{0,50}\.ANIMATE_CHAT_AVATAR,/,
             replacement: {
-                // Track hovering on messages to animate names since Discord's
-                // built-in hover tracking is buggy. Used by a patch below.
                 match: /(let{setAnimate:\i}=(\i);)/,
-                replace: "$1if(arguments[0].message){if($2.animate){$self.addHoveringMessage(arguments[0].message.id)}else{$self.removeHoveringMessage(arguments[0].message.id)}};"
+                replace: "$1$self.handleHoveringMessage(arguments[0].message,$2.animate);"
             }
         },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        {
+            // Attach the group ID to their messages to allow animating mentions within a group.
+            find: "CUSTOM_GIFT?\"\":",
+            replacement: {
+                match: /(\(\i,\i,\i\);)(let \i=\i.id===\i(?:.{0,500}?)hovering:(\i))/,
+                replace: "$1arguments[0].message.showMeYourNameGroupId=arguments[0].groupId;$2"
+            },
+        },
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
         {
             // Replace names in mentions.
             find: ".USER_MENTION)",
@@ -820,19 +850,6 @@ export default definePlugin({
                 match: /(className:"mention",)/,
                 replace: "$1props:arguments[2],"
             }
-        },
-        {
-            // Track hovering over second-level messages to animate gradients.
-            // Tack on the groupId, which is how the client groups messages from
-            // the same author together, to the message temporarily so that mentions
-            // across a group can animate together. By default, Discord handles this,
-            // but moving between messages can cause a race condition where the animation
-            // stops on one of the messages in the group. This patch fixes that.
-            find: "CUSTOM_GIFT?\"\":",
-            replacement: {
-                match: /(\(\i,\i,\i\);)(let \i=\i.id===\i(?:.{0,500}?)hovering:(\i))/,
-                replace: "$1arguments[0].message.showMeYourNameGroupId=arguments[0].groupId;if($3){$self.addHoveringMessage(arguments[0].groupId)}else{$self.removeHoveringMessage(arguments[0].groupId)};$2"
-            },
         },
         {
             // Replace names in the member list.
@@ -914,6 +931,7 @@ export default definePlugin({
             replacement: {
                 match: /(serverDeaf:\i,)nick:(\i)/,
                 replace: "$1showMeYourNameVoice:$2=$self.getMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:arguments[0].channel.guild_id,type:\"voiceChannel\"})??(arguments[0].nick)"
+<<<<<<< HEAD
 =======
     ],
     settings,
@@ -943,6 +961,8 @@ export default definePlugin({
                 if (shouldUseFriendNickname)
                     nick = friendNickname;
 >>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
+=======
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
             }
         }
     ],
@@ -971,6 +991,7 @@ export default definePlugin({
 
     addHoveringMessage,
     removeHoveringMessage,
+    handleHoveringMessage,
     addHoveringReactionPopout,
     removeHoveringReactionPopout,
     getMessageNameText,

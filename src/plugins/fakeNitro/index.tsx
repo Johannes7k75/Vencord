@@ -183,12 +183,17 @@ function makeBypassPatches(): Omit<Patch, "plugin"> {
 export default definePlugin({
     name: "FakeNitro",
 <<<<<<< HEAD
+<<<<<<< HEAD
     authors: [Devs.Arjix, Devs.D3SOX, Devs.Ven, Devs.fawn, Devs.captain, Devs.Nuckyz, Devs.AutumnVN],
     description: "Allows you to stream in nitro quality, send fake emojis/stickers, and use client themes.",
 =======
     authors: [Devs.Arjix, Devs.D3SOX, Devs.Ven, Devs.fawn, Devs.captain, Devs.Nuckyz, Devs.AutumnVN, Devs.sadan],
     description: "Allows you to send fake emojis/stickers, use nitro themes, and stream in nitro quality",
 >>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
+=======
+    authors: [Devs.Arjix, Devs.D3SOX, Devs.Ven, Devs.fawn, Devs.captain, Devs.Nuckyz, Devs.AutumnVN, Devs.sadan],
+    description: "Allows you to send fake emojis/stickers, use nitro themes, and stream in nitro quality",
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
     dependencies: ["MessageEventsAPI"],
 
     settings,

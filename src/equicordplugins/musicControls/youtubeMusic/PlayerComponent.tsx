@@ -19,13 +19,21 @@
 import "./ytmStyles.css";
 
 import { ImageIcon, LinkIcon, OpenExternalIcon } from "@components/Icons";
+<<<<<<< HEAD
+=======
+import { SeekBar } from "@equicordplugins/musicControls/spotify/SeekBar";
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 import { debounce } from "@shared/debounce";
 import { openImageModal } from "@utils/discord";
 import { classes, copyWithToast } from "@utils/misc";
 import { ContextMenuApi, Flex, FluxDispatcher, Forms, Menu, React, useEffect, useState, useStateFromStores } from "@webpack/common";
 
+<<<<<<< HEAD
 import { type Song, type Repeat, YoutubeMusicStore } from "./YtmStore";
 import { SeekBar } from "@equicordplugins/musicControls/spotify/SeekBar";
+=======
+import { type Repeat, type Song, YoutubeMusicStore } from "./YtmStore";
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 
 const cl = (className: string) => `vc-ytm-${className}`;
 

@@ -35,7 +35,6 @@ export let PermissionStore: GenericStore;
 export let GuildChannelStore: GenericStore;
 export let ReadStateStore: GenericStore;
 export let PresenceStore: GenericStore;
-export let VoiceStateStore: GenericStore;
 
 export let GuildStore: t.GuildStore;
 export let GuildRoleStore: t.GuildRoleStore;
@@ -49,12 +48,18 @@ export let ChannelStore: t.ChannelStore;
 export let TypingStore: t.TypingStore;
 export let RelationshipStore: t.RelationshipStore;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 export let MediaEngineStore: t.MediaEngineStore;
-export let StreamerModeStore: t.StreamerModeStore;
 export let SpellCheckStore: t.SpellCheckStore;
+<<<<<<< HEAD
 =======
 export let VoiceStateStore: t.VoiceStateStore;
 >>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
+=======
+export let VoiceStateStore: t.VoiceStateStore;
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 
 export let EmojiStore: t.EmojiStore;
 export let StickersStore: t.StickersStore;
@@ -80,7 +85,6 @@ waitForStore("GuildRoleStore", m => GuildRoleStore = m);
 waitForStore("GuildMemberStore", m => GuildMemberStore = m);
 waitForStore("RelationshipStore", m => RelationshipStore = m);
 waitForStore("MediaEngineStore", m => MediaEngineStore = m);
-waitForStore("StreamerModeStore", m => StreamerModeStore = m);
 waitForStore("SpellcheckStore", m => SpellCheckStore = m);
 waitForStore("PermissionStore", m => PermissionStore = m);
 waitForStore("PresenceStore", m => PresenceStore = m);
@@ -99,4 +103,3 @@ waitForStore("ThemeStore", m => {
     // Importing this directly can easily cause circular imports. For this reason, use a non import access here.
     Vencord.QuickCss.initQuickCssThemeStore();
 });
-waitForStore("VoiceStateStore", m => VoiceStateStore = m);

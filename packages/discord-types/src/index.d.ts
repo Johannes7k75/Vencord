@@ -8,5 +8,4 @@ export * from "./modules";
 export * from "./stores";
 export * from "./passiveupdatestate";
 export * from "./utils";
-export * from "./voicestate";
 export * as Webpack from "../webpack";

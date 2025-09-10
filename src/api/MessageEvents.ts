@@ -31,6 +31,7 @@ export interface MessageObject {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export interface Upload {
     classification: string;
     currentSize: number;
@@ -59,6 +60,8 @@ export interface Upload {
 
 =======
 >>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
+=======
+>>>>>>> 00340d6b09cebfb22b83e4f87c5f15d12dff1cde
 export interface MessageReplyOptions {
     messageReference: Message["messageReference"];
     allowedMentions?: {
