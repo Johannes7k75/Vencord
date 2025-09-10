@@ -9,10 +9,15 @@ import "./style.css";
 import { definePluginSettings, Settings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+<<<<<<< HEAD
 import { GuildMember, Message, User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, GuildMemberStore, GuildStore, MessageStore, RelationshipStore, StreamerModeStore, UserStore } from "@webpack/common";
 import { JSX } from "react";
+=======
+import { Channel, Message, User } from "@vencord/discord-types";
+import { RelationshipStore, StreamerModeStore } from "@webpack/common";
+>>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
 
 const wrapEmojis = findByCodeLazy("lastIndex;return");
 const AccessibilityStore = findStoreLazy("AccessibilityStore");
@@ -791,6 +796,7 @@ export default definePlugin({
                 replace: "$1if(arguments[0].message){if($2.animate){$self.addHoveringMessage(arguments[0].message.id)}else{$self.removeHoveringMessage(arguments[0].message.id)}};"
             }
         },
+<<<<<<< HEAD
         {
             // Replace names in mentions.
             find: ".USER_MENTION)",
@@ -908,6 +914,35 @@ export default definePlugin({
             replacement: {
                 match: /(serverDeaf:\i,)nick:(\i)/,
                 replace: "$1showMeYourNameVoice:$2=$self.getMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:arguments[0].channel.guild_id,type:\"voiceChannel\"})??(arguments[0].nick)"
+=======
+    ],
+    settings,
+
+    renderUsername: ErrorBoundary.wrap(({ author, channel, message, isRepliedMessage, withMentionPrefix, userOverride }: UsernameProps) => {
+        try {
+            const { mode, friendNicknames, displayNames, inReplies } = settings.store;
+
+            const user = userOverride ?? message.author;
+            let username = StreamerModeStore.enabled
+                ? user.username[0] + "…"
+                : user.username;
+
+            if (displayNames)
+                username = user.globalName || username;
+
+            let { nick } = author;
+
+            const friendNickname = RelationshipStore.getNickname(author.authorId);
+
+            if (friendNickname) {
+                const shouldUseFriendNickname =
+                    friendNicknames === "always" ||
+                    (friendNicknames === "dms" && channel.isPrivate()) ||
+                    (friendNicknames === "fallback" && !nick);
+
+                if (shouldUseFriendNickname)
+                    nick = friendNickname;
+>>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
             }
         }
     ],

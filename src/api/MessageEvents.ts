@@ -17,7 +17,7 @@
 */
 
 import { Logger } from "@utils/Logger";
-import type { Channel, CustomEmoji, Message } from "@vencord/discord-types";
+import type { Channel, CloudUpload, CustomEmoji, Message } from "@vencord/discord-types";
 import { MessageStore } from "@webpack/common";
 import type { Promisable } from "type-fest";
 
@@ -30,6 +30,7 @@ export interface MessageObject {
     tts: boolean;
 }
 
+<<<<<<< HEAD
 export interface Upload {
     classification: string;
     currentSize: number;
@@ -56,6 +57,8 @@ export interface Upload {
     uploadedFilename: string;
 }
 
+=======
+>>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
 export interface MessageReplyOptions {
     messageReference: Message["messageReference"];
     allowedMentions?: {
@@ -68,7 +71,7 @@ export interface MessageReplyOptions {
 
 export interface MessageOptions {
     stickers?: string[];
-    uploads?: Upload[];
+    uploads?: CloudUpload[];
     replyOptions: MessageReplyOptions;
     content: string;
     channel: Channel;

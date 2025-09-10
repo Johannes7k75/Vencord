@@ -48,15 +48,20 @@ export let SelectedGuildStore: t.SelectedGuildStore;
 export let ChannelStore: t.ChannelStore;
 export let TypingStore: t.TypingStore;
 export let RelationshipStore: t.RelationshipStore;
+<<<<<<< HEAD
 export let MediaEngineStore: t.MediaEngineStore;
 export let StreamerModeStore: t.StreamerModeStore;
 export let SpellCheckStore: t.SpellCheckStore;
+=======
+export let VoiceStateStore: t.VoiceStateStore;
+>>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
 
 export let EmojiStore: t.EmojiStore;
 export let StickersStore: t.StickersStore;
 export let ThemeStore: t.ThemeStore;
 export let WindowStore: t.WindowStore;
 export let DraftStore: t.DraftStore;
+export let StreamerModeStore: t.StreamerModeStore;
 
 /**
  * @see jsdoc of {@link t.useStateFromStores}
@@ -87,6 +92,8 @@ waitForStore("WindowStore", m => WindowStore = m);
 waitForStore("EmojiStore", m => EmojiStore = m);
 waitForStore("StickersStore", m => StickersStore = m);
 waitForStore("TypingStore", m => TypingStore = m);
+waitForStore("VoiceStateStore", m => VoiceStateStore = m);
+waitForStore("StreamerModeStore", m => StreamerModeStore = m);
 waitForStore("ThemeStore", m => {
     ThemeStore = m;
     // Importing this directly can easily cause circular imports. For this reason, use a non import access here.

@@ -16,13 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+<<<<<<< HEAD
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { Upload } from "@api/MessageEvents";
 import { definePluginSettings, Settings } from "@api/Settings";
+=======
+import { definePluginSettings } from "@api/Settings";
+>>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
 import ErrorBoundary from "@components/ErrorBoundary";
 import { reverseExtensionMap } from "@equicordplugins/fixFileExtensions";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { CloudUpload } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
 import { useState } from "@webpack/common";
 
@@ -96,7 +101,7 @@ export default definePlugin({
         },
     ],
 
-    AnonymiseUploadButton: ErrorBoundary.wrap(({ upload }: { upload: Upload; }) => {
+    AnonymiseUploadButton: ErrorBoundary.wrap(({ upload }: { upload: CloudUpload; }) => {
         const [anonymise, setAnonymise] = useState(upload[ANONYMISE_UPLOAD_SYMBOL] ?? settings.store.anonymiseByDefault);
 
         function onToggleAnonymise() {
@@ -117,7 +122,14 @@ export default definePlugin({
         );
     }, { noop: true }),
 
+<<<<<<< HEAD
     anonymise(upload: Upload) {
+=======
+    anonymise(upload: CloudUpload) {
+        if ((upload[ANONYMISE_UPLOAD_SYMBOL] ?? settings.store.anonymiseByDefault) === false) {
+            return;
+        }
+>>>>>>> fbc2dbe78189dcfe9dc907058770e951730995bd
 
         const originalFileName = upload.filename;
         const tarMatch = tarExtMatcher.exec(originalFileName);
