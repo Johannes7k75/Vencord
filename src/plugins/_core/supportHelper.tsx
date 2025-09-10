@@ -165,7 +165,7 @@ function generatePluginList() {
     }
 
     if (enabledPlugins.length > 100 && !(isPluginDev(UserStore.getCurrentUser()?.id) || isEquicordPluginDev(UserStore.getCurrentUser()?.id))) {
-        return Alerts.show({
+        Alerts.show({
             title: "You are attempting to get support!",
             body: <div>
                 <style>
@@ -178,9 +178,10 @@ function generatePluginList() {
                 <Forms.FormText>We do not handle support for users who use 100+ plugins</Forms.FormText>
                 <Forms.FormText>issue could be plugin confliction</Forms.FormText>
                 <Forms.FormText>try removing some plugins and see if it fixes!</Forms.FormText>
-            </div>,
-            cancelText: "Okay continue"
+            </div>
         });
+
+        return "You have more than 100 plugins enabled, please reduce the number of enabled plugins to get support.";
     }
 
     return content;

@@ -5,10 +5,9 @@
  */
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, Menu, MessageActions, NavigationRouter } from "@webpack/common";
+import definePlugin from "@utils/types";
+import { Menu, ChannelStore, NavigationRouter, FluxDispatcher, MessageActions, MessageStore } from "@webpack/common";
 
 interface ChannelSelectEvent {
     type: "CHANNEL_SELECT";
@@ -16,14 +15,39 @@ interface ChannelSelectEvent {
     guildId: string | null;
 }
 
-let lastChannelId = "0";
+let lastChan = "0";
 
-function autoJump({ guild_id, id: channelId }) {
-    const guildId = guild_id ?? "@me";
+function jumpToPresent(channelId, { limit }: { limit?: number } = {}) {
+    MessageActions.trackJump(channelId, null, "Present");
 
-    lastChannelId = channelId;
+    const jump = { present: true };
+    
+    if (MessageStore.hasPresent(channelId)) {
+        FluxDispatcher.dispatch({
+            type: "LOAD_MESSAGES_SUCCESS_CACHED",
+            jump,
+            channelId,
+            limit
+        });
+    } else {
+        MessageActions.fetchMessages({
+            channelId,
+            limit,
+            jump
+        });
+    }
+}
+
+function autoJump(channel: any) {
+    const guildId = channel.guild_id ?? "@me";
+    const channelId = channel.id;
+
+    if (channelId === lastChan) return;
+
     NavigationRouter.transitionTo(`/channels/${guildId}/${channelId}`);
-    MessageActions.jumpToPresent(channelId, { limit: null });
+    lastChan = channelId;
+
+    jumpToPresent(channelId, { limit: 100 });
 }
 
 const MenuPatch: NavContextMenuPatchCallback = (children, { channel }) => {
@@ -31,26 +55,15 @@ const MenuPatch: NavContextMenuPatchCallback = (children, { channel }) => {
         <Menu.MenuItem
             id="auto-jump"
             label="Jump to Last Message"
-            action={() => {
-                autoJump(channel);
-            }}
+            action={() => autoJump(channel)}
         />
     );
 };
 
-const settings = definePluginSettings({
-    autoJumping: {
-        type: OptionType.BOOLEAN,
-        description: "Automatically jump to the last message in the channel when switching channels",
-        default: false
-    }
-});
-
 export default definePlugin({
     name: "AutoJump",
-    description: "Jumps to Last Message in Channel",
+    description: "Automatically jumps to the last message in selected channel & adds a context-menu option to jump to the last message.",
     authors: [EquicordDevs.omaw],
-    settings,
     contextMenus: {
         "channel-context": MenuPatch,
         "user-context": MenuPatch,
@@ -58,12 +71,10 @@ export default definePlugin({
     },
     flux: {
         async CHANNEL_SELECT({ guildId, channelId }: ChannelSelectEvent) {
-            if (!settings.store.autoJumping || !channelId) return;
-
+            if (!guildId || !channelId) return;
             const channel = ChannelStore.getChannel(channelId);
-            if (!channel || channel.id === lastChannelId) return;
-
-            autoJump({ guild_id: guildId, id: channelId });
+            if (!channel || lastChan === channel.id) return;
+            autoJump(channel);
         }
     }
 });
